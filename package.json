@@ -1,0 +1,28 @@
+{
+  "name": "croo-contractor-agent",
+  "version": "0.1.0",
+  "description": "CROO Contractor — a CAP-native A2A orchestrator agent that hires, verifies, and composes specialist agents on the CROO Agent Store.",
+  "license": "MIT",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "provider": "ts-node src/provider.ts",
+    "requester": "ts-node src/requester.ts",
+    "orchestrate": "ts-node src/orchestrator.ts",
+    "specialist:solana": "SPECIALIST=solana-tx-doctor ts-node src/specialists/run.ts",
+    "specialist:summarizer": "SPECIALIST=summarizer ts-node src/specialists/run.ts"
+  },
+  "dependencies": {
+    "@croo-network/sdk": "^0.1.0",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.0"
+  }
+}
