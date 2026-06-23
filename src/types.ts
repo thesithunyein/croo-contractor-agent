@@ -20,6 +20,10 @@ export interface RegistryEntry {
   deliverable: 'text' | 'schema';
   /** Optional JSON schema (required fields) the delivery must satisfy. */
   requiredFields?: string[];
+  /** Where this entry came from: our own specialists vs a recruited partner team. */
+  source?: 'builtin' | 'partner';
+  /** Optional owning team/handle — used for the A2A network report. */
+  team?: string;
 }
 
 /** A single unit of work the orchestrator will subcontract to one specialist. */

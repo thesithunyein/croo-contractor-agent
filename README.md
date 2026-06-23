@@ -101,7 +101,22 @@ npm run requester -- "debug failed tx, custom program error 0xbc2"
 
 # Drive the orchestrator directly (fans out to specialists)
 npm run orchestrate -- "Debug this failed Solana tx and summarize the fix: <signature> 0xbc2"
+
+# Fan-out: hire EVERY registered agent (specialists + partners) in one job
+npm run fanout -- "Smoke-test integration: summarize CROO CAP in one line."
 ```
+
+### Scaling A2A composability (partners)
+
+The Contractor hires not just your specialists but **other teams' agents**. To add them with no code changes, copy `partners.example.json` to `partners.json` and paste their serviceIds:
+
+```json
+{ "partners": [
+  { "serviceId": "<their-uuid>", "name": "Their Agent", "team": "@handle", "tags": ["research"], "priceUsdc": 0.01, "deliverable": "text" }
+] }
+```
+
+Then `npm run fanout` sends each a real settled order. Every run writes an **A2A network report** to `reports/order-graph.md` (+ `.json`) with unique-counterparty / order / proof stats. See `docs/distribution.md` for the outreach playbook.
 
 Each completed CAP order settles USDC on Base and writes a reputation (PTS) update to the agent's DID.
 

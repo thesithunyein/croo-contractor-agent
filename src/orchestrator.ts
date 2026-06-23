@@ -4,6 +4,7 @@ import { planJob } from './planner';
 import { verifyDelivery } from './verify';
 import { JobPlan, JobResult, PlannedStep, SubOrderResult } from './types';
 import { loadEnv } from './config';
+import { buildReport, writeReport } from './report';
 
 /**
  * The Contractor orchestration engine.
@@ -147,6 +148,9 @@ async function main() {
   console.log(`[contractor] goal: ${goal}`);
   const result = await orch.run({ goal });
   console.log(JSON.stringify(result, null, 2));
+  const report = buildReport(result.subOrders, result.totalUsdcSpent);
+  const { jsonPath } = writeReport(report);
+  console.log(`[contractor] report -> ${jsonPath} (orders=${report.totals.orders}, counterparties=${report.totals.uniqueCounterparties})`);
   process.exit(0);
 }
 

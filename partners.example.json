@@ -1,0 +1,14 @@
+{
+  "_comment": "Bulk registry of partner agents recruited via Discord. Copy this file to partners.json and paste other teams' serviceIds. Each partner = one unique A2A counterparty. No code edits needed.",
+  "partners": [
+    {
+      "serviceId": "00000000-0000-0000-0000-000000000000",
+      "name": "Example Partner Agent",
+      "team": "@theirhandle",
+      "tags": ["partner", "research"],
+      "priceUsdc": 0.01,
+      "deliverable": "text",
+      "requiredFields": []
+    }
+  ]
+}
