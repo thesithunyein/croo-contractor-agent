@@ -1,0 +1,46 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CROO Contractor logo">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0E1A14"/>
+      <stop offset="1" stop-color="#050806"/>
+    </linearGradient>
+    <linearGradient id="lime" x1="160" y1="160" x2="352" y2="352" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#B6FF3A"/>
+      <stop offset="1" stop-color="#5BD23A"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#8DEB3A" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#8DEB3A" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+  </defs>
+
+  <!-- background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect x="6" y="6" width="500" height="500" rx="108" fill="none" stroke="#1C2A20" stroke-width="2"/>
+  <circle cx="256" cy="256" r="190" fill="url(#glow)"/>
+
+  <!-- spokes: hub hiring specialists -->
+  <g stroke="url(#lime)" stroke-width="10" stroke-linecap="round" opacity="0.85">
+    <line x1="256" y1="256" x2="140" y2="140"/>
+    <line x1="256" y1="256" x2="372" y2="140"/>
+    <line x1="256" y1="256" x2="140" y2="372"/>
+    <line x1="256" y1="256" x2="372" y2="372"/>
+  </g>
+
+  <!-- specialist nodes -->
+  <g>
+    <circle cx="140" cy="140" r="30" fill="#0E1A14" stroke="url(#lime)" stroke-width="8"/>
+    <circle cx="372" cy="140" r="30" fill="#0E1A14" stroke="url(#lime)" stroke-width="8"/>
+    <circle cx="140" cy="372" r="30" fill="#0E1A14" stroke="url(#lime)" stroke-width="8"/>
+    <circle cx="372" cy="372" r="30" fill="#0E1A14" stroke="url(#lime)" stroke-width="8"/>
+  </g>
+
+  <!-- central hub (the Contractor) -->
+  <circle cx="256" cy="256" r="78" fill="url(#lime)"/>
+  <circle cx="256" cy="256" r="78" fill="none" stroke="#D6FF8A" stroke-width="3" opacity="0.6"/>
+  <!-- monogram C -->
+  <path d="M291 214a56 56 0 1 0 0 84" fill="none" stroke="#050806" stroke-width="20" stroke-linecap="round"/>
+</svg>

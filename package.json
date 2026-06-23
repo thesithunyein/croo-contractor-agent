@@ -10,11 +10,11 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "provider": "ts-node src/provider.ts",
-    "requester": "ts-node src/requester.ts",
-    "orchestrate": "ts-node src/orchestrator.ts",
-    "specialist:solana": "SPECIALIST=solana-tx-doctor ts-node src/specialists/run.ts",
-    "specialist:summarizer": "SPECIALIST=summarizer ts-node src/specialists/run.ts"
+    "provider": "cross-env ENV_FILE=.env.contractor ts-node src/provider.ts",
+    "orchestrate": "cross-env ENV_FILE=.env.contractor ts-node src/orchestrator.ts",
+    "requester": "cross-env ENV_FILE=.env.requester ts-node src/requester.ts",
+    "specialist:solana": "cross-env ENV_FILE=.env.solana SPECIALIST=solana-tx-doctor ts-node src/specialists/run.ts",
+    "specialist:summarizer": "cross-env ENV_FILE=.env.summarizer SPECIALIST=summarizer ts-node src/specialists/run.ts"
   },
   "dependencies": {
     "@croo-network/sdk": "^0.1.0",
@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
+    "cross-env": "^7.0.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.0"
   }

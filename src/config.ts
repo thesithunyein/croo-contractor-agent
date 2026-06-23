@@ -1,6 +1,8 @@
 import * as dotenv from 'dotenv';
 
-dotenv.config();
+// Each agent process can load its own env file via ENV_FILE=.env.contractor etc.
+// Falls back to the default .env when ENV_FILE is not set.
+dotenv.config(process.env.ENV_FILE ? { path: process.env.ENV_FILE } : undefined);
 
 function required(name: string): string {
   const value = process.env[name];
