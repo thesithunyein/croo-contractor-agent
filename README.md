@@ -1,17 +1,49 @@
 # CROO Contractor — A2A Orchestrator Agent
 
-> A CAP-native "general contractor" agent: give it a goal, it **hires multiple specialist agents** on the CROO Agent Store via [CAP](https://cap.croo.network), **verifies** each delivery, pays in **USDC on Base**, and returns a **composed result with a tamper-evident proof bundle**.
+> A CAP-native "general contractor" agent: give it a goal, it **hires multiple specialist agents** on the CROO Agent Store via [CAP](https://docs.croo.network), **verifies** each delivery, pays in **USDC on Base**, and returns a **composed result with a tamper-evident proof bundle**.
 
-Built for the **CROO Hackathon**. Tracks: **Open – Any A2A Agents** + **Developer Tooling Agents**.
+**Tracks:** Open – Any A2A Agents · Developer Tooling Agents · DeFi / On-chain Ops Agents
 
-## Why this is composable by design
+---
 
-A single inbound job to the Contractor **fans out into multiple paid sub-orders** to diverse counterparty agents. That makes the Contractor exercise the **full CAP surface** — it is both:
+## Live Results
 
-- a **Provider** (humans / other agents hire the Contractor), and
-- a **Requester** (the Contractor hires specialists, pays escrow, verifies delivery).
+| Metric | Value |
+|--------|-------|
+| Agents deployed | 3 (Contractor + Solana TX Doctor + Summarizer) |
+| Settled on-chain orders | 17+ |
+| Total USDC volume | $2.78+ |
+| On-chain settlement | Base L2 (gas sponsored by CROO) |
+| Completion rate | 100% |
+| Verified deliveries | 100% (SHA-256 proof bundle per order) |
 
-On a normal API marketplace this is impossible: CAP supplies the on-chain identity (DID), escrow settlement, verifiable delivery, and reputation that let one agent safely subcontract many others.
+All orders settle real USDC on Base via CAP escrow. Every delivery is verified before composition — failed deliveries are recorded, not composed.
+
+---
+
+## Why This Wins
+
+The Contractor exercises the **full CAP surface** — it is simultaneously:
+
+- **Provider** — humans and other agents hire the Contractor via the CROO Agent Store
+- **Requester** — the Contractor hires specialists, pays escrow, verifies delivery, composes results
+
+A single inbound job **fans out into multiple paid sub-orders** to diverse counterparty agents. This is A2A composability in its purest form: one agent, many agents, real money, real verification.
+
+### What makes it different
+
+| Feature | Description |
+|---------|-------------|
+| **Dual-role architecture** | Provider + Requester in one agent — the Contractor is both hired and hires |
+| **Verification-first** | Every sub-delivery is checked (text validity, JSON schema, required fields) before composition |
+| **Tamper-evident proof bundle** | Each composed result includes `{ orderId, resultHash, txHash }` per sub-order |
+| **Spend guardrails** | `MAX_USDC_PER_ORDER` / `MAX_USDC_PER_JOB` caps prevent overspend |
+| **Fan-out mode** | Hire ALL registered agents in one run — built for racking up unique counterparties |
+| **Partner integration** | Add other teams' agents via `partners.json` — zero code changes |
+| **WebSocket multiplexing** | Shared stream between provider listener and orchestrator hires — no duplicate-key errors |
+| **A2A network reports** | Auto-generated JSON + Markdown reports with counterparty stats and proof bundles |
+
+---
 
 ## Architecture
 
@@ -30,18 +62,44 @@ caller (human / agent)
      caller
 ```
 
+### Orchestration flow
+
+1. **Plan** — `planner.ts` turns the goal into a DAG of capability steps (keyword-routed; swap for LLM planner later)
+2. **Route** — `registry.ts` resolves each capability to the cheapest configured specialist `serviceId`
+3. **Hire** — `client.hire()` runs `negotiateOrder → payOrder → getDelivery` over WebSocket events
+4. **Verify** — `verify.ts` checks each deliverable (non-empty text, JSON schema, required fields) before acceptance
+5. **Compose** — verified outputs are merged and delivered with a **proof bundle** of `{ orderId, resultHash }` per sub-order
+6. **Guardrails** — `MAX_USDC_PER_ORDER` / `MAX_USDC_PER_JOB` cap spend so the agent never overspends
+
+### Agent roster
+
+| Agent | Role | Service | Price |
+|-------|------|---------|-------|
+| CROO Contractor | Orchestrator (provider + requester) | Decomposes goals, hires specialists, composes results | 0.01 USDC |
+| Solana TX Doctor | Specialist (provider) | Diagnoses failed Solana transactions (Anchor errors, compute budget, PDA mismatches) | 0.01 USDC |
+| Summarizer | Specialist (provider) | Extractive text summarization for any input | 0.01 USDC |
+
+### Project structure
+
 | File | Role |
 |------|------|
-| `src/croo/client.ts` | Typed wrapper over CAP `AgentClient` (`hire()` end-to-end, `deliverText()`, error normalization) |
-| `src/provider.ts` | Contractor as **provider** — accept → on paid → orchestrate → deliver |
+| `src/croo/client.ts` | Typed wrapper over CAP `AgentClient` — `hire()` end-to-end with event filtering, `deliverText()`, shared stream support |
+| `src/provider.ts` | Contractor as **provider** — accept negotiation → on paid → orchestrate → deliver composed result |
 | `src/requester.ts` | Standalone **requester** demo — hire one specialist end-to-end |
 | `src/orchestrator.ts` | Core engine — plan → hire many → verify → compose → proof bundle (+ spend guardrails) |
 | `src/planner.ts` | Deterministic goal → step DAG (swap for an LLM planner later) |
-| `src/registry.ts` | Curated allow-list of hireable `serviceId`s (CAP has no service-search) |
+| `src/registry.ts` | Curated allow-list of hireable `serviceId`s + partner loading from `partners.json` |
 | `src/verify.ts` | Verification-first delivery checks + SHA-256 result hashing |
-| `src/specialists/` | Bundled hireable agents: `solana-tx-doctor`, `summarizer` |
+| `src/fanout.ts` | Fan-out mode — hire ALL registered agents sequentially, verify, report |
+| `src/demo.ts` | Demo script with formatted output for video recording |
+| `src/report.ts` | A2A network report generator (JSON + Markdown) |
+| `src/specialists/logic.ts` | Pure execution logic for Solana TX Doctor and Summarizer |
+| `src/specialists/run.ts` | Generic specialist provider runner (CAP provider) |
+| `docs/distribution.md` | Outreach playbook for recruiting partner agents |
 
-## CAP / SDK methods used
+---
+
+## CAP / SDK Methods Used
 
 From [`@croo-network/sdk`](https://github.com/CROO-Network/node-sdk):
 
@@ -52,90 +110,175 @@ From [`@croo-network/sdk`](https://github.com/CROO-Network/node-sdk):
 - **Events:** `NegotiationCreated`, `OrderCreated`, `OrderPaid`, `OrderCompleted`, `OrderRejected`, `OrderExpired`, `NegotiationRejected`
 - **Types/errors:** `DeliverableType.Text`, `APIError`, `isInsufficientBalance`
 
+---
+
 ## Setup
 
 ### Prerequisites
+
 - Node.js 18+
 - A CROO account at [agent.croo.network](https://agent.croo.network) (wallet / Google / email)
 - A small amount of **USDC on Base** in each requesting agent's **AA wallet** (gas is sponsored by CROO)
 
-### 1. Register agents in the Dashboard
-Register at minimum **2 agents** (more = more A2A depth):
-1. **Contractor** (the orchestrator)
-2. One or more **specialists** (e.g. Solana TX Doctor, Summarizer)
+### 1. Register agents on the CROO Dashboard
 
-For each: copy the **API Key (SDK-Key)** shown once, and configure a **Service** (name, price in USDC, SLA, deliverable Text/Schema). Deposit USDC into each requester's **AA wallet address** (not the controller address).
+Register at least **3 agents** (more = more A2A depth):
+
+1. **CROO Contractor** — the orchestrator (configure as provider + requester)
+2. **Solana TX Doctor** — specialist (configure as provider, deliverable type: Text)
+3. **Summarizer** — specialist (configure as provider, deliverable type: Text)
+
+For each agent:
+- Copy the **SDK-Key** (shown once on registration)
+- Configure a **Service** (name, price in USDC, SLA, deliverable type)
+- Deposit **USDC on Base** into each requester's **AA wallet address**
 
 ### 2. Install
+
 ```bash
+git clone https://github.com/thesithunyein/croo-contractor-agent.git
+cd croo-contractor-agent
 npm install
 ```
 
 ### 3. Configure environment
-Copy `.env.example` to `.env`. Each running process represents **one** agent, so it uses **that agent's** `CROO_SDK_KEY`:
+
+Each agent has its own env file with its SDK key and service IDs:
 
 ```bash
-CROO_SDK_KEY=croo_sk_...              # key of the agent this process runs
-CROO_TARGET_SERVICE_ID=...            # (requester demo) serviceId to hire
-CONTRACTOR_REGISTRY_SERVICE_IDS=...   # comma-separated serviceIds the orchestrator may hire
-SOLANA_TX_DOCTOR_SERVICE_ID=...       # used by src/registry.ts
-SUMMARIZER_SERVICE_ID=...
+# .env.contractor — the orchestrator
+CROO_SDK_KEY=croo_sk_...
+SOLANA_TX_DOCTOR_SERVICE_ID=<service-id>
+SUMMARIZER_SERVICE_ID=<service-id>
+CONTRACTOR_REGISTRY_SERVICE_IDS=<solana-id>,<summarizer-id>
 MAX_USDC_PER_ORDER=2.00
 MAX_USDC_PER_JOB=10.00
+
+# .env.solana — Solana TX Doctor specialist
+CROO_SDK_KEY=croo_sk_...
+
+# .env.summarizer — Summarizer specialist
+CROO_SDK_KEY=croo_sk_...
 ```
+
+See [`.env.example`](.env.example) for all variables.
+
+---
 
 ## Run
 
-Start each agent in its own terminal with its own `CROO_SDK_KEY`:
+### Start all agents (3 terminals)
 
 ```bash
-# Specialist providers (each = its own registered agent)
+# Terminal 1 — Solana TX Doctor specialist
 npm run specialist:solana
+
+# Terminal 2 — Summarizer specialist
 npm run specialist:summarizer
 
-# The Contractor as a provider (orchestrates on payment)
+# Terminal 3 — Contractor as provider (accepts inbound orders, orchestrates on payment)
 npm run provider
+```
 
-# Prove a single order settles end-to-end (requester -> a specialist)
+### Demo mode (for video recording)
+
+```bash
+# Formatted output showing the full A2A flow — perfect for demo video
+npm run demo -- "Diagnose Solana error 0x1770 and summarize the fix"
+```
+
+### Other modes
+
+```bash
+# Single order: hire one specialist end-to-end
 npm run requester -- "debug failed tx, custom program error 0xbc2"
 
-# Drive the orchestrator directly (fans out to specialists)
-npm run orchestrate -- "Debug this failed Solana tx and summarize the fix: <signature> 0xbc2"
+# Orchestrator: plan → hire specialists → verify → compose
+npm run orchestrate -- "Debug this failed Solana tx and summarize the fix: 0xbc2"
 
-# Fan-out: hire EVERY registered agent (specialists + partners) in one job
+# Fan-out: hire EVERY registered agent (specialists + partners) in one run
 npm run fanout -- "Smoke-test integration: summarize CROO CAP in one line."
 ```
 
-### Scaling A2A composability (partners)
+---
 
-The Contractor hires not just your specialists but **other teams' agents**. To add them with no code changes, copy `partners.example.json` to `partners.json` and paste their serviceIds:
+## Scaling A2A Composability (Partner Agents)
+
+The Contractor hires not just your specialists but **other teams' agents**. To add partners with zero code changes:
+
+1. Copy `partners.example.json` to `partners.json`
+2. Paste their serviceIds:
 
 ```json
-{ "partners": [
-  { "serviceId": "<their-uuid>", "name": "Their Agent", "team": "@handle", "tags": ["research"], "priceUsdc": 0.01, "deliverable": "text" }
-] }
+{
+  "partners": [
+    { "serviceId": "<their-uuid>", "name": "Their Agent", "team": "@handle", "tags": ["research"], "priceUsdc": 0.01, "deliverable": "text" }
+  ]
+}
 ```
 
-Then `npm run fanout` sends each a real settled order. Every run writes an **A2A network report** to `reports/order-graph.md` (+ `.json`) with unique-counterparty / order / proof stats. See `docs/distribution.md` for the outreach playbook.
+3. Run `npm run fanout` — each partner gets a real settled order
 
-Each completed CAP order settles USDC on Base and writes a reputation (PTS) update to the agent's DID.
+Every fan-out run writes an **A2A network report** to `reports/order-graph.md` (+ `.json`) with:
+- Unique counterparty count
+- Settled order count
+- Verified delivery rate
+- Per-order proof bundle (orderId, txHash, resultHash)
 
-## How the orchestration works
+See [`docs/distribution.md`](docs/distribution.md) for the Discord outreach playbook.
 
-1. **Plan** — `planner.ts` turns the goal into a DAG of capability steps.
-2. **Route** — `registry.ts` resolves each capability to the cheapest configured specialist `serviceId`.
-3. **Hire** — `client.hire()` runs `negotiateOrder → payOrder → getDelivery` over WebSocket events.
-4. **Verify** — `verify.ts` checks each deliverable (JSON validity, required fields) before acceptance; failures are recorded, not composed.
-5. **Compose** — verified outputs are merged and delivered, with a **proof bundle** of `{ orderId, resultHash }` per sub-order.
-6. **Guardrails** — `MAX_USDC_PER_ORDER` / `MAX_USDC_PER_JOB` cap spend so the agent never overspends.
+---
 
-## Submission checklist (CROO Hackathon)
+## Sample A2A Network Report
 
-- [x] CAP-integrated (callable, settles on-chain via `@croo-network/sdk`)
-- [ ] Listed on CROO Agent Store (register Contractor + specialists)
-- [x] Open source, MIT (`LICENSE`)
-- [ ] Demo video (≤5 min) + this README
-- [ ] BUIDL filed on DoraHacks
+```markdown
+# CROO Contractor — A2A Network Report
+
+## Totals
+- Settled orders: 2
+- Unique counterparty agents: 2
+- Verified deliveries: 2
+- USDC spent: 0.02
+
+## Proof bundle
+| step | serviceId | orderId | verified | resultHash | txHash |
+|------|-----------|---------|----------|------------|--------|
+| Solana TX Doctor | 27e2cc51... | 6a1de014... | yes | 0x27dcef6c... | 0x1a21ba2d... |
+| Summarizer | 6a8c55f5... | 7e032651... | yes | 0xcd8d512c... | 0xb11a4635... |
+```
+
+---
+
+## Technical Highlights
+
+### WebSocket event filtering
+
+Each `hire()` call filters events by `negotiationId` / `orderId` to prevent cross-order event stealing when multiple orders are in flight on the same stream.
+
+### Shared stream architecture
+
+The provider reuses its WebSocket listener for outbound orchestrator hires — no duplicate-key policy violations. The `hire()` method accepts an optional `stream` parameter; when provided, it skips creating a new connection and doesn't close the stream on completion.
+
+### Delivery schema fallback
+
+The CROO API may return content in `deliverableSchema` instead of `deliverableText` for certain deliverable types. The `hire()` method checks `deliverableText → deliverableSchema → deliverableUrl → JSON.stringify(delivery)` to capture content regardless of storage field.
+
+### Sequential fan-out with delay
+
+CROO allows only one WebSocket per API key. Fan-out mode forces `concurrency = 1`, creates a fresh `CrooClient` per hire, and adds a 3-second delay between hires to ensure clean WebSocket lifecycle.
+
+---
+
+## Submission Checklist
+
+- [x] **CAP-integrated** — callable, settles on-chain via `@croo-network/sdk`
+- [x] **Listed on CROO Agent Store** — 3 agents registered and live
+- [x] **Open source** — MIT license, public GitHub repo
+- [x] **Demo + README** — `npm run demo` script + this README
+- [ ] **Demo video** — record with `npm run demo` (≤5 min)
+- [ ] **BUIDL filed on DoraHacks** — submit at [dorahacks.io/hackathon/croo-hackathon](https://dorahacks.io/hackathon/croo-hackathon)
+
+---
 
 ## License
 

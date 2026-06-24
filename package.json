@@ -13,6 +13,7 @@
     "provider": "cross-env ENV_FILE=.env.contractor ts-node src/provider.ts",
     "orchestrate": "cross-env ENV_FILE=.env.contractor ts-node src/orchestrator.ts",
     "fanout": "cross-env ENV_FILE=.env.contractor ts-node src/fanout.ts",
+    "demo": "cross-env ENV_FILE=.env.contractor ts-node src/demo.ts",
     "requester": "cross-env ENV_FILE=.env.requester ts-node src/requester.ts",
     "specialist:solana": "cross-env ENV_FILE=.env.solana SPECIALIST=solana-tx-doctor ts-node src/specialists/run.ts",
     "specialist:summarizer": "cross-env ENV_FILE=.env.summarizer SPECIALIST=summarizer ts-node src/specialists/run.ts"
