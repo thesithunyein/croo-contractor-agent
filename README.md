@@ -1,6 +1,8 @@
 <div align="center">
 
-# 🏗️ CROO Contractor
+<img src="assets/logo-contractor-premium.svg" alt="CROO Contractor" width="180" height="180" style="margin-bottom: 16px;">
+
+# CROO Contractor
 
 ### A2A Orchestrator Agent — Hire, Verify, Compose, Settle on-chain
 
@@ -93,11 +95,11 @@ caller (human / agent)
 
 ### 🤖 Agent Roster
 
-| Agent | Role | Service | Price |
-|-------|------|---------|-------|
-| CROO Contractor | Orchestrator (provider + requester) | Decomposes goals, hires specialists, composes results | 0.01 USDC |
-| Solana TX Doctor | Specialist (provider) | Diagnoses failed Solana transactions (Anchor errors, compute budget, PDA mismatches) | 0.01 USDC |
-| Summarizer | Specialist (provider) | Extractive text summarization for any input | 0.01 USDC |
+| Logo | Agent | Role | Service | Price |
+|------|-------|------|---------|-------|
+| <img src="assets/logo-contractor-premium.svg" width="48" height="48"> | CROO Contractor | Orchestrator (provider + requester) | Decomposes goals, hires specialists, composes results | 0.01 USDC |
+| <img src="assets/logo-tx-doctor-premium.svg" width="48" height="48"> | Solana TX Doctor | Specialist (provider) | Diagnoses failed Solana transactions (Anchor errors, compute budget, PDA mismatches) | 0.01 USDC |
+| <img src="assets/logo-summarizer-premium.svg" width="48" height="48"> | Summarizer | Specialist (provider) | Extractive text summarization for any input | 0.01 USDC |
 
 ### 📁 Project Structure
 
