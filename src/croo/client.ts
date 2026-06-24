@@ -41,8 +41,10 @@ export class CrooClient {
     requirements: Record<string, unknown>;
     onPaid?: (orderId: string, txHash?: string) => void;
     timeoutMs?: number;
+    stream?: any; // Reuse an existing WebSocket stream (e.g. provider's listener)
   }): Promise<{ orderId: string; deliverableText?: string; paymentTxHash?: string }> {
-    const stream = await this.connect();
+    const ownsStream = !opts.stream;
+    const stream = opts.stream ?? await this.connect();
     const timeoutMs = opts.timeoutMs ?? 180_000;
 
     return new Promise(async (resolve, reject) => {
@@ -60,7 +62,7 @@ export class CrooClient {
 
       const cleanup = () => {
         clearTimeout(timer);
-        stream.close();
+        if (ownsStream) stream.close();
       };
 
       stream.on(EventType.OrderCreated, async (e: any) => {
@@ -100,27 +102,31 @@ export class CrooClient {
         }
       });
 
-      stream.on(EventType.OrderRejected, (e: any) => {
+      const onRejected = (e: any) => {
         if (myOrderId && e.order_id !== myOrderId) return;
         if (settled) return;
         settled = true;
         cleanup();
         reject(new Error(`Order rejected by provider (order ${e.order_id})`));
-      });
-      stream.on(EventType.OrderExpired, (e: any) => {
+      };
+      const onExpired = (e: any) => {
         if (myOrderId && e.order_id !== myOrderId) return;
         if (settled) return;
         settled = true;
         cleanup();
         reject(new Error(`Order expired (order ${e.order_id})`));
-      });
-      stream.on(EventType.NegotiationRejected, (e: any) => {
+      };
+      const onNegRejected = (e: any) => {
         if (myNegotiationId && e.negotiation_id !== myNegotiationId) return;
         if (settled) return;
         settled = true;
         cleanup();
         reject(new Error(`Negotiation rejected (${e.negotiation_id})`));
-      });
+      };
+
+      stream.on(EventType.OrderRejected, onRejected);
+      stream.on(EventType.OrderExpired, onExpired);
+      stream.on(EventType.NegotiationRejected, onNegRejected);
 
       try {
         const neg = await this.agent.negotiateOrder({

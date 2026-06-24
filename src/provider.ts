@@ -32,7 +32,7 @@ async function main() {
     try {
       const order = await client.agent.getOrder(orderId);
       const goal = extractGoal(order);
-      const result = await orchestrator.run({ goal });
+      const result = await orchestrator.run({ goal, stream });
       await client.deliverText(orderId, result);
       console.log(`[contractor:provider] delivered order ${orderId} ` +
         `(${result.proofBundle.length} sub-orders, $${result.totalUsdcSpent.toFixed(2)} spent)`);

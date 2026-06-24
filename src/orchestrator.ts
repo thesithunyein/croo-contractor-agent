@@ -24,12 +24,12 @@ export class Orchestrator {
     this.client = client;
   }
 
-  async run(input: { goal: string; steps?: PlannedStep[] }): Promise<JobResult> {
+  async run(input: { goal: string; steps?: PlannedStep[]; stream?: any }): Promise<JobResult> {
     const plan = planJob(input);
-    return this.execute(plan);
+    return this.execute(plan, input.stream);
   }
 
-  async execute(plan: JobPlan): Promise<JobResult> {
+  async execute(plan: JobPlan, stream?: any): Promise<JobResult> {
     const results = new Map<string, SubOrderResult>();
     let totalUsdcSpent = 0;
 
@@ -70,6 +70,7 @@ export class Orchestrator {
         const hired = await this.client.hire({
           serviceId: entry.serviceId,
           requirements: inputs,
+          stream,
         });
         const v = verifyDelivery(entry, hired.deliverableText);
         totalUsdcSpent += entry.priceUsdc;
