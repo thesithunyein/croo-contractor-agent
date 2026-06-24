@@ -22,7 +22,9 @@ async function main() {
   const env = loadEnv();
   const goal = process.argv.slice(2).join(' ').trim() || 'Demonstrate an A2A orchestration via CROO CAP.';
   const tagFilter = (process.env.FANOUT_TAG ?? '').trim();
-  const concurrency = Math.max(1, Number(process.env.FANOUT_CONCURRENCY ?? 3));
+  // CROO allows only ONE WebSocket per API key, so parallel hires collide.
+  // Force sequential unless explicitly overridden (still limited to 1 for safety).
+  const concurrency = 1;
 
   let targets = activeRegistry();
   if (tagFilter) targets = targets.filter((e) => e.tags.includes(tagFilter));
@@ -35,7 +37,6 @@ async function main() {
   console.log(`[fanout] goal: ${goal}`);
   console.log(`[fanout] hiring ${targets.length} agent(s)` + (tagFilter ? ` (tag=${tagFilter})` : ''));
 
-  const client = new CrooClient(env);
   const results: SubOrderResult[] = [];
   let totalUsdcSpent = 0;
   let jobBudgetExceeded = false;
@@ -56,6 +57,8 @@ async function main() {
       }
       console.log(`[fanout] -> hiring ${entry.name} (${entry.serviceId})`);
       try {
+        // Fresh client per hire — ensures a clean WebSocket with no stale events.
+        const client = new CrooClient(env);
         const hired = await client.hire({
           serviceId: entry.serviceId,
           requirements: { goal, task: goal },
@@ -83,6 +86,12 @@ async function main() {
           verificationNotes: [err instanceof Error ? err.message : String(err)],
         });
         console.error(`[fanout]    FAILED ${entry.name}: ${err instanceof Error ? err.message : err}`);
+      }
+      // Wait 3s between hires so the previous WebSocket fully closes before
+      // the next one opens (CROO kicks duplicate-key connections).
+      if (queue.length) {
+        console.log('[fanout]    waiting 3s before next hire…');
+        await new Promise((r) => setTimeout(r, 3000));
       }
     }
   }

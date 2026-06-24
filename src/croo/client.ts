@@ -43,13 +43,17 @@ export class CrooClient {
     timeoutMs?: number;
   }): Promise<{ orderId: string; deliverableText?: string; paymentTxHash?: string }> {
     const stream = await this.connect();
-    const timeoutMs = opts.timeoutMs ?? 120_000;
+    const timeoutMs = opts.timeoutMs ?? 180_000;
 
     return new Promise(async (resolve, reject) => {
-      let orderId: string | undefined;
+      let myOrderId: string | undefined;
+      let myNegotiationId: string | undefined;
       let paymentTxHash: string | undefined;
+      let settled = false;
 
       const timer = setTimeout(() => {
+        if (settled) return;
+        settled = true;
         cleanup();
         reject(new Error(`hire() timed out after ${timeoutMs}ms for service ${opts.serviceId}`));
       }, timeoutMs);
@@ -60,24 +64,34 @@ export class CrooClient {
       };
 
       stream.on(EventType.OrderCreated, async (e: any) => {
+        // Only pay for orders matching OUR negotiation — avoid stealing events
+        // from other orders that may arrive on the same WebSocket.
+        if (myNegotiationId && e.negotiation_id !== myNegotiationId) return;
+        if (settled) return;
         try {
-          orderId = e.order_id;
+          myOrderId = e.order_id;
           const pay = await this.agent.payOrder(e.order_id);
           paymentTxHash = pay.txHash;
           opts.onPaid?.(e.order_id, pay.txHash);
         } catch (err) {
+          if (settled) return;
+          settled = true;
           cleanup();
           reject(this.describe(err));
         }
       });
 
       stream.on(EventType.OrderCompleted, async (e: any) => {
+        // Only resolve for OUR order — ignore completions from other orders.
+        if (myOrderId && e.order_id !== myOrderId) return;
+        if (settled) return;
+        settled = true;
         try {
-          const delivery = await this.agent.getDelivery(e.order_id);
+          const delivery = await this.agent.getDelivery(e.order_id) as any;
           cleanup();
           resolve({
             orderId: e.order_id,
-            deliverableText: delivery.deliverableText,
+            deliverableText: delivery.deliverableText || delivery.deliverableSchema || delivery.deliverableUrl || JSON.stringify(delivery),
             paymentTxHash,
           });
         } catch (err) {
@@ -87,14 +101,23 @@ export class CrooClient {
       });
 
       stream.on(EventType.OrderRejected, (e: any) => {
+        if (myOrderId && e.order_id !== myOrderId) return;
+        if (settled) return;
+        settled = true;
         cleanup();
         reject(new Error(`Order rejected by provider (order ${e.order_id})`));
       });
       stream.on(EventType.OrderExpired, (e: any) => {
+        if (myOrderId && e.order_id !== myOrderId) return;
+        if (settled) return;
+        settled = true;
         cleanup();
         reject(new Error(`Order expired (order ${e.order_id})`));
       });
       stream.on(EventType.NegotiationRejected, (e: any) => {
+        if (myNegotiationId && e.negotiation_id !== myNegotiationId) return;
+        if (settled) return;
+        settled = true;
         cleanup();
         reject(new Error(`Negotiation rejected (${e.negotiation_id})`));
       });
@@ -104,9 +127,10 @@ export class CrooClient {
           serviceId: opts.serviceId,
           requirements: JSON.stringify(opts.requirements),
         });
-        // Some providers create the order directly; keep negotiationId for tracing.
-        void neg.negotiationId;
+        myNegotiationId = neg.negotiationId;
       } catch (err) {
+        if (settled) return;
+        settled = true;
         cleanup();
         reject(this.describe(err));
       }
