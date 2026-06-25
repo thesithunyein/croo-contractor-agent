@@ -234,6 +234,28 @@ npm run fanout -- "Smoke-test integration: summarize CROO CAP in one line."
 
 ---
 
+## 🌐 Deploy to Render.com (24/7 Uptime)
+
+Your laptop going to sleep makes agents **OFFLINE**. Deploy to Render free workers so they stay live:
+
+1. **Push this repo to GitHub** (already done)
+2. **Go to [render.com](https://render.com)** → create a free account
+3. Click **New → Blueprint** → connect your GitHub repo
+4. Render creates 3 background workers from [`render.yaml`](render.yaml)
+5. **Fill in environment variables** in the Render dashboard for each service:
+
+| Service | Required env vars |
+|---------|-------------------|
+| `croo-contractor-provider` | `CROO_SDK_KEY`, `SOLANA_TX_DOCTOR_SERVICE_ID`, `SUMMARIZER_SERVICE_ID`, `CONTRACTOR_REGISTRY_SERVICE_IDS` |
+| `croo-solana-specialist` | `CROO_SDK_KEY` (Solana agent's key) |
+| `croo-summarizer-specialist` | `CROO_SDK_KEY` (Summarizer agent's key) |
+
+6. **Start all 3 workers** — they auto-reconnect and stay online
+
+After deploying, shut down your local agents so you don't get duplicate WebSocket errors.
+
+---
+
 ## 🌐 Scaling A2A Composability (Partner Agents)
 
 The Contractor hires not just your specialists but **other teams' agents**. To add partners with zero code changes:

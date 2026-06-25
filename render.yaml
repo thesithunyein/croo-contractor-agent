@@ -1,0 +1,76 @@
+# Render.com blueprint for running all 3 CROO agents 24/7 as background workers.
+#
+# Deploy: push this file to GitHub, then click "Blueprint" in Render dashboard and
+# select this repo. After deploy, fill in each service's environment variables.
+
+services:
+  - type: worker
+    name: croo-contractor-provider
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: npm run provider
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CROO_API_URL
+        value: https://api.croo.network
+      - key: CROO_WS_URL
+        value: wss://api.croo.network/ws
+      - key: BASE_RPC_URL
+        value: https://mainnet.base.org
+      - key: CROO_SDK_KEY
+        sync: false
+      - key: SOLANA_TX_DOCTOR_SERVICE_ID
+        sync: false
+      - key: SUMMARIZER_SERVICE_ID
+        sync: false
+      - key: CONTRACTOR_REGISTRY_SERVICE_IDS
+        sync: false
+      - key: MAX_USDC_PER_ORDER
+        value: 2.00
+      - key: MAX_USDC_PER_JOB
+        value: 10.00
+
+  - type: worker
+    name: croo-solana-specialist
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: SPECIALIST=solana-tx-doctor npm run specialist:solana
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CROO_API_URL
+        value: https://api.croo.network
+      - key: CROO_WS_URL
+        value: wss://api.croo.network/ws
+      - key: BASE_RPC_URL
+        value: https://mainnet.base.org
+      - key: CROO_SDK_KEY
+        sync: false
+      - key: SPECIALIST
+        value: solana-tx-doctor
+
+  - type: worker
+    name: croo-summarizer-specialist
+    runtime: node
+    plan: free
+    region: oregon
+    buildCommand: npm install && npm run build
+    startCommand: SPECIALIST=summarizer npm run specialist:summarizer
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: CROO_API_URL
+        value: https://api.croo.network
+      - key: CROO_WS_URL
+        value: wss://api.croo.network/ws
+      - key: BASE_RPC_URL
+        value: https://mainnet.base.org
+      - key: CROO_SDK_KEY
+        sync: false
+      - key: SPECIALIST
+        value: summarizer
