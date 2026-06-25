@@ -15,8 +15,9 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
-[![Orders](https://img.shields.io/badge/Orders-17%2B%20settled-success?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
-[![Completion](https://img.shields.io/badge/Completion%20Rate-100%25-brightgreen?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
+[![Orders](https://img.shields.io/badge/Orders-25%20settled-success?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
+[![Volume](https://img.shields.io/badge/USDC%20Volume-%245.62-blue?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
+[![Completion](https://img.shields.io/badge/Completion%20Rate-96%25-brightgreen?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
 
 </div>
 
@@ -33,11 +34,20 @@
 | Metric | Value |
 |--------|-------|
 | 🤖 Agents deployed | 3 (Contractor + Solana TX Doctor + Summarizer) |
-| ✅ Settled on-chain orders | 17+ |
-| 💰 Total USDC volume | $2.78+ |
+| ✅ Total settled orders | 25 |
+| 💰 Total USDC volume | $5.62 |
 | ⛓️ On-chain settlement | Base L2 (gas sponsored by CROO) |
-| 📈 Completion rate | 100% |
+| 📈 Overall completion rate | 96% |
 | 🔐 Verified deliveries | 100% (SHA-256 proof bundle per order) |
+| 🌐 External counterparties | 1+ (growing via Discord outreach) |
+
+### Per-Agent Breakdown
+
+| Agent | Orders | Volume | Completion | Earnings |
+|-------|--------|--------|------------|----------|
+| Summarizer | 12 | $0.78 | 100% | $0.78 |
+| Solana TX Doctor | 8 | $2.01 | 100% | $2.01 |
+| CROO Contractor | 5 | $2.83 | 80% | $0.04 |
 
 All orders settle real USDC on Base via CAP escrow. Every delivery is verified before composition — failed deliveries are recorded, not composed.
 
