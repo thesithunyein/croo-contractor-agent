@@ -1,16 +1,19 @@
-# Render.com blueprint for running all 3 CROO agents 24/7 as background workers.
+# Render.com blueprint for running all 3 CROO agents as free web services.
 #
 # Deploy: push this file to GitHub, then click "Blueprint" in Render dashboard and
 # select this repo. After deploy, fill in each service's environment variables.
+#
+# Note: Render free web services spin down after 15 min of inactivity. For true
+# 24/7 uptime, upgrade to the Starter plan or use a paid worker.
 
 services:
-  - type: worker
+  - type: web
     name: croo-contractor-provider
     runtime: node
     plan: free
     region: oregon
     buildCommand: npm install && npm run build
-    startCommand: npm run provider
+    startCommand: node dist/run-with-health.js provider
     envVars:
       - key: NODE_ENV
         value: production
@@ -33,13 +36,13 @@ services:
       - key: MAX_USDC_PER_JOB
         value: 10.00
 
-  - type: worker
+  - type: web
     name: croo-solana-specialist
     runtime: node
     plan: free
     region: oregon
     buildCommand: npm install && npm run build
-    startCommand: SPECIALIST=solana-tx-doctor npm run specialist:solana
+    startCommand: node dist/run-with-health.js solana
     envVars:
       - key: NODE_ENV
         value: production
@@ -54,13 +57,13 @@ services:
       - key: SPECIALIST
         value: solana-tx-doctor
 
-  - type: worker
+  - type: web
     name: croo-summarizer-specialist
     runtime: node
     plan: free
     region: oregon
     buildCommand: npm install && npm run build
-    startCommand: SPECIALIST=summarizer npm run specialist:summarizer
+    startCommand: node dist/run-with-health.js summarizer
     envVars:
       - key: NODE_ENV
         value: production
