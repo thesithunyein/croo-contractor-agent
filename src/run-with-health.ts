@@ -31,11 +31,18 @@ const health = spawn('node', ['dist/health-server.js'], {
   shell: true,
 });
 
-// Start agent
-const agentProc = spawn(cmd, {
-  stdio: 'inherit',
-  shell: true,
-});
+// Start agent and restart it if it crashes so the health port stays alive.
+let agentProc = spawn(cmd, { stdio: 'inherit', shell: true });
+
+function startAgent() {
+  console.log(`[agent:${agent}] starting...`);
+  agentProc = spawn(cmd, { stdio: 'inherit', shell: true });
+  agentProc.on('exit', (code) => {
+    console.log(`[agent:${agent}] exited with code ${code}`);
+    console.log(`[agent:${agent}] restarting in 5s...`);
+    setTimeout(startAgent, 5000);
+  });
+}
 
 function shutdown() {
   health.kill();
@@ -54,6 +61,6 @@ health.on('exit', (code) => {
 
 agentProc.on('exit', (code) => {
   console.log(`[agent:${agent}] exited with code ${code}`);
-  health.kill();
-  process.exit(code ?? 1);
+  console.log(`[agent:${agent}] restarting in 5s...`);
+  setTimeout(startAgent, 5000);
 });
