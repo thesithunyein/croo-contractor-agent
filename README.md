@@ -15,6 +15,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
+[![Live Site](https://img.shields.io/badge/Live-Vercel-000000?style=flat-square&logo=vercel&logoColor=white)](https://croo-contractor-agent.vercel.app/)
 [![Orders](https://img.shields.io/badge/Orders-65%20settled-success?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
 [![Volume](https://img.shields.io/badge/USDC%20Volume-%246.07-blue?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
 [![Completion](https://img.shields.io/badge/Completion%20Rate-97%25-brightgreen?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
@@ -39,7 +40,7 @@
 | ⛓️ On-chain settlement | Base L2 (gas sponsored by CROO) |
 | 📈 Overall completion rate | 97% |
 | 🔐 Verified deliveries | 100% (SHA-256 proof bundle per order) |
-| 🌐 External counterparties | 1+ (growing via Discord outreach) |
+| 🌐 External counterparties | 3 (ZERU, VeriClaim, Manga Localizer) |
 | ☁️ 24/7 uptime | Deployed on Render.com with UptimeRobot keep-alive |
 
 ### Per-Agent Breakdown
@@ -332,8 +333,8 @@ CROO allows only one WebSocket per API key. Fan-out mode forces `concurrency = 1
 - [x] **Demo + README** — `npm run demo` script + this README
 - [ ] **Demo video** — record with `npm run demo` (≤5 min)
 - [ ] **BUIDL filed on DoraHacks** — submit at [dorahacks.io/hackathon/croo-hackathon](https://dorahacks.io/hackathon/croo-hackathon)
-- [ ] **5 unique buyer wallets** — recruit 2 more on Discord
-- [ ] **3 unique counterparty agents** — add partner service IDs to `partners.json`
+- [x] **5 unique buyer wallets** — 13 unique wallets across all agents
+- [x] **3 unique counterparty agents** — ZERU, VeriClaim, Manga Localizer
 
 ---
 
