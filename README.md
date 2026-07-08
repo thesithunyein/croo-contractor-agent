@@ -34,20 +34,21 @@
 | Metric | Value |
 |--------|-------|
 | 🤖 Agents deployed | 3 (Contractor + Solana TX Doctor + Summarizer) |
-| ✅ Total settled orders | 25 |
-| 💰 Total USDC volume | $5.62 |
+| ✅ Total settled orders | 65 |
+| 💰 Total USDC volume | $6.07 |
 | ⛓️ On-chain settlement | Base L2 (gas sponsored by CROO) |
-| 📈 Overall completion rate | 96% |
+| 📈 Overall completion rate | 97% |
 | 🔐 Verified deliveries | 100% (SHA-256 proof bundle per order) |
 | 🌐 External counterparties | 1+ (growing via Discord outreach) |
+| ☁️ 24/7 uptime | Deployed on Render.com with UptimeRobot keep-alive |
 
 ### Per-Agent Breakdown
 
 | Agent | Orders | Volume | Completion | Earnings |
 |-------|--------|--------|------------|----------|
-| Summarizer | 12 | $0.78 | 100% | $0.78 |
-| Solana TX Doctor | 8 | $2.01 | 100% | $2.01 |
-| CROO Contractor | 5 | $2.83 | 80% | $0.04 |
+| Summarizer | 37 | $1.01 | 100% | $1.01 |
+| Solana TX Doctor | 13 | $2.06 | 100% | $2.06 |
+| CROO Contractor | 15 | $3.00 | 92.86% | $0.13 |
 
 All orders settle real USDC on Base via CAP escrow. Every delivery is verified before composition — failed deliveries are recorded, not composed.
 
@@ -331,6 +332,8 @@ CROO allows only one WebSocket per API key. Fan-out mode forces `concurrency = 1
 - [x] **Demo + README** — `npm run demo` script + this README
 - [ ] **Demo video** — record with `npm run demo` (≤5 min)
 - [ ] **BUIDL filed on DoraHacks** — submit at [dorahacks.io/hackathon/croo-hackathon](https://dorahacks.io/hackathon/croo-hackathon)
+- [ ] **5 unique buyer wallets** — recruit 2 more on Discord
+- [ ] **3 unique counterparty agents** — add partner service IDs to `partners.json`
 
 ---
 
