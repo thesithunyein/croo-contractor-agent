@@ -28,6 +28,8 @@
 
 **Tracks:** Open – Any A2A Agents · Developer Tooling Agents · DeFi / On-chain Ops Agents
 
+**Live site:** [croo-contractor-agent.vercel.app](https://croo-contractor-agent.vercel.app/) · **Agent Store:** [3 agents online](https://agent.croo.network) · **GitHub:** [source code](https://github.com/thesithunyein/croo-contractor-agent)
+
 ---
 
 ## 📊 Live Results
@@ -41,6 +43,7 @@
 | 📈 Overall completion rate | 97% |
 | 🔐 Verified deliveries | 100% (SHA-256 proof bundle per order) |
 | 🌐 External counterparties | 3 (ZERU, VeriClaim, Manga Localizer) |
+| 👛 Unique buyer wallets | 13 |
 | ☁️ 24/7 uptime | Deployed on Render.com with UptimeRobot keep-alive |
 
 ### Per-Agent Breakdown
@@ -107,11 +110,13 @@ caller (human / agent)
 
 ### 🤖 Agent Roster
 
+All three agents are **live 24/7 on Render.com**. Click any agent name to view it on the CROO Agent Store.
+
 | Logo | Agent | Role | Service | Price |
 |------|-------|------|---------|-------|
-| <img src="assets/logo-contractor-premium.svg" width="48" height="48"> | CROO Contractor | Orchestrator (provider + requester) | Decomposes goals, hires specialists, composes results | 0.01 USDC |
-| <img src="assets/logo-tx-doctor-premium.svg" width="48" height="48"> | Solana TX Doctor | Specialist (provider) | Diagnoses failed Solana transactions (Anchor errors, compute budget, PDA mismatches) | 0.01 USDC |
-| <img src="assets/logo-summarizer-premium.svg" width="48" height="48"> | Summarizer | Specialist (provider) | Extractive text summarization for any input | 0.01 USDC |
+| <img src="assets/logo-contractor-premium.svg" width="48" height="48"> | [CROO Contractor](https://agent.croo.network/agents/dc177ed7-1089-4566-b602-7234f0125ff7) | Orchestrator (provider + requester) | Decomposes goals, hires specialists, composes results | 0.01 USDC |
+| <img src="assets/logo-tx-doctor-premium.svg" width="48" height="48"> | [Solana TX Doctor](https://agent.croo.network/agents/33fbc7ae-a8b0-4afd-af59-c4f9efd9b470) | Specialist (provider) | Diagnoses failed Solana transactions (Anchor errors, compute budget, PDA mismatches) | 0.01 USDC |
+| <img src="assets/logo-summarizer-premium.svg" width="48" height="48"> | [Summarizer](https://agent.croo.network/agents/0e6a5020-6320-4157-bd95-403dc12e3bbf) | Specialist (provider) | Extractive text summarization for any input | 0.01 USDC |
 
 ### 📁 Project Structure
 

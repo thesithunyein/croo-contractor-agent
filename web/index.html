@@ -104,8 +104,9 @@
     .hero-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; margin-bottom: 64px; }
 
     /* Stats */
-    .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 800px; margin: 0 auto; }
-    @media (min-width: 768px) { .stats { grid-template-columns: repeat(4, 1fr); } }
+    .stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 900px; margin: 0 auto; }
+    @media (min-width: 768px) { .stats { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1024px) { .stats { grid-template-columns: repeat(6, 1fr); } }
     .stat-card { border-radius: 16px; padding: 24px; text-align: center; }
     .stat-card .icon { width: 20px; height: 20px; margin: 0 auto 12px; color: var(--gray); }
     .stat-card .value { font-size: 30px; font-weight: 800; margin-bottom: 4px; }
@@ -246,7 +247,7 @@
     <div class="container">
       <div class="badge glass fade-in">
         <span class="dot"></span>
-        <span>3 agents live 24/7 on Render</span>
+        <span>3 agents live 24/7 · 65 orders settled · 13 buyer wallets</span>
       </div>
       <h1 class="fade-in fade-in-1">Give it a goal.<br><span class="gradient-text">It hires, verifies, pays.</span></h1>
       <p class="fade-in fade-in-2">A2A Orchestrator Agent that hires specialist agents on the CROO Agent Store via CAP, verifies each delivery, pays in USDC on Base, and returns a composed result with a tamper-evident proof bundle.</p>
@@ -275,6 +276,16 @@
           <svg class="icon-svg" style="margin:0 auto 12px;display:block" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
           <div class="value">97%</div>
           <div class="label">Completion Rate</div>
+        </div>
+        <div class="stat-card glass glass-hover">
+          <svg class="icon-svg" style="margin:0 auto 12px;display:block" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>
+          <div class="value">13</div>
+          <div class="label">Buyer Wallets</div>
+        </div>
+        <div class="stat-card glass glass-hover">
+          <svg class="icon-svg" style="margin:0 auto 12px;display:block" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="12" cy="20" r="2"/><line x1="12" y1="12" x2="5" y2="5"/><line x1="12" y1="12" x2="19" y2="5"/><line x1="12" y1="12" x2="12" y2="20"/></svg>
+          <div class="value">3</div>
+          <div class="label">A2A Partners</div>
         </div>
         <div class="stat-card glass glass-hover">
           <svg class="icon-svg" style="margin:0 auto 12px;display:block" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
@@ -475,27 +486,27 @@
         <p>The Contractor doesn't just hire its own specialists — it hires other teams' agents too. Zero code changes.</p>
       </div>
       <div class="partners-grid">
-        <div class="partner-card glass glass-hover">
+        <a href="https://agent.croo.network/agents/61a86c70-c1ce-45b7-8a1f-3736bf849bab" target="_blank" class="partner-card glass glass-hover" style="display:block">
           <div class="partner-header">
             <h3>ZERU</h3>
             <span class="partner-status live">Live</span>
           </div>
           <p>Autonomous DeFi decision engine — market intelligence, data synthesis, and competitive analysis</p>
-        </div>
-        <div class="partner-card glass glass-hover">
+        </a>
+        <a href="https://agent.croo.network/agents/b3c0b29a-d5a1-4066-ae7c-36ea84f6d231" target="_blank" class="partner-card glass glass-hover" style="display:block">
           <div class="partner-header">
             <h3>VeriClaim</h3>
             <span class="partner-status live">Live</span>
           </div>
           <p>5-agent AI audit on insurance claim denials — legally-defensible resolution with SHA-256 audit trail</p>
-        </div>
-        <div class="partner-card glass glass-hover">
+        </a>
+        <a href="https://agent.croo.network/agents/0dfd114d-dc6e-4f01-bfce-686617d38ee8" target="_blank" class="partner-card glass glass-hover" style="display:block">
           <div class="partner-header">
             <h3>Manga Localizer</h3>
             <span class="partner-status offline">Offline</span>
           </div>
           <p>Localizes Japanese manga pages into Arabic with OCR, translation, and JSON coordinate output</p>
-        </div>
+        </a>
       </div>
     </div>
   </section>
@@ -517,6 +528,26 @@
         <span class="sdk-chip glass">getOrder()</span>
         <span class="sdk-chip glass">deliverOrder()</span>
         <span class="sdk-chip glass">rejectOrder()</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tech Stack -->
+  <section>
+    <div class="container" style="max-width:800px">
+      <div class="section-title">
+        <h2>Built With</h2>
+        <p>Production-grade stack for autonomous agent commerce</p>
+      </div>
+      <div class="sdk-chips">
+        <span class="sdk-chip glass" style="color:#3178C6">TypeScript</span>
+        <span class="sdk-chip glass" style="color:#339933">Node.js 18+</span>
+        <span class="sdk-chip glass" style="color:#00D9FF">@croo-network/sdk</span>
+        <span class="sdk-chip glass" style="color:#0052FF">Base L2</span>
+        <span class="sdk-chip glass" style="color:#2775CA">USDC</span>
+        <span class="sdk-chip glass" style="color:#ff6b35">Render.com</span>
+        <span class="sdk-chip glass" style="color:#000">Vercel</span>
+        <span class="sdk-chip glass" style="color:#4ade80">WebSocket</span>
       </div>
     </div>
   </section>
