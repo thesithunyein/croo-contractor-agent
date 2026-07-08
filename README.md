@@ -15,9 +15,9 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
-[![Orders](https://img.shields.io/badge/Orders-25%20settled-success?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
-[![Volume](https://img.shields.io/badge/USDC%20Volume-%245.62-blue?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
-[![Completion](https://img.shields.io/badge/Completion%20Rate-96%25-brightgreen?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
+[![Orders](https://img.shields.io/badge/Orders-65%20settled-success?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
+[![Volume](https://img.shields.io/badge/USDC%20Volume-%246.07-blue?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
+[![Completion](https://img.shields.io/badge/Completion%20Rate-97%25-brightgreen?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
 
 </div>
 
