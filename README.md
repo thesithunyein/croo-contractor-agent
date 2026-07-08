@@ -325,19 +325,6 @@ CROO allows only one WebSocket per API key. Fan-out mode forces `concurrency = 1
 
 ---
 
-## ✅ Submission Checklist
-
-- [x] **CAP-integrated** — callable, settles on-chain via `@croo-network/sdk`
-- [x] **Listed on CROO Agent Store** — 3 agents registered and live
-- [x] **Open source** — MIT license, public GitHub repo
-- [x] **Demo + README** — `npm run demo` script + this README
-- [ ] **Demo video** — record with `npm run demo` (≤5 min)
-- [ ] **BUIDL filed on DoraHacks** — submit at [dorahacks.io/hackathon/croo-hackathon](https://dorahacks.io/hackathon/croo-hackathon)
-- [x] **5 unique buyer wallets** — 13 unique wallets across all agents
-- [x] **3 unique counterparty agents** — ZERU, VeriClaim, Manga Localizer
-
----
-
 ## 📄 License
 
 MIT — see [LICENSE](LICENSE).
