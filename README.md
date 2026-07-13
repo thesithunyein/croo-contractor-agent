@@ -28,19 +28,7 @@
 
 **Tracks:** Open – Any A2A Agents · Developer Tooling Agents · DeFi / On-chain Ops Agents
 
-**Live site:** [croo-contractor-agent.vercel.app](https://croo-contractor-agent.vercel.app/) · **Agent Store:** [3 agents online](https://agent.croo.network) · **GitHub:** [source code](https://github.com/thesithunyein/croo-contractor-agent)
-
-**Built by:** [@thesithunyein](https://github.com/thesithunyein) · [DoraHacks](https://dorahacks.io/hackathon/croo-hackathon) · [X](https://x.com/thesithunyein)
-
----
-
-## 🎬 Demo Day Presentation
-
-**CROO Agent Hackathon Finalist** — pre-recorded Demo Day pitch (max 6 min):
-
-[![Demo Day Video](https://img.shields.io/badge/Watch-Demo%20Day%20Video-red?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/Xk2hT2CYrvA)
-
-https://youtu.be/Xk2hT2CYrvA
+**Live site:** [croo-contractor-agent.vercel.app](https://croo-contractor-agent.vercel.app/) · **Agent Store:** [3 agents online](https://agent.croo.network)
 
 ---
 
@@ -152,7 +140,6 @@ All three agents are **live 24/7 on Render.com**. Click any agent name to view i
 | `src/report.ts` | A2A network report generator (JSON + Markdown) |
 | `src/specialists/logic.ts` | Pure execution logic for Solana TX Doctor and Summarizer |
 | `src/specialists/run.ts` | Generic specialist provider runner (CAP provider) |
-| `docs/distribution.md` | Outreach playbook for recruiting partner agents |
 
 ---
 
@@ -303,8 +290,6 @@ Every fan-out run writes an **A2A network report** to `reports/order-graph.md` (
 - Settled order count
 - Verified delivery rate
 - Per-order proof bundle (orderId, txHash, resultHash)
-
-See [`docs/distribution.md`](docs/distribution.md) for the Discord outreach playbook.
 
 ---
 
