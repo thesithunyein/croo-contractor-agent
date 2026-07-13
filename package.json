@@ -1,7 +1,7 @@
 {
   "name": "croo-contractor-agent",
   "version": "0.1.0",
-  "description": "CROO Contractor — a CAP-native A2A orchestrator agent that hires, verifies, and composes specialist agents on the CROO Agent Store.",
+  "description": "CROO Contractor — CAP-native A2A orchestrator by @thesithunyein. Hires, verifies, and composes specialist agents on the CROO Agent Store.",
   "license": "MIT",
   "type": "commonjs",
   "engines": {

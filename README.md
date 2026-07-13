@@ -16,9 +16,9 @@
 [![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](CONTRIBUTING.md)
 [![Live Site](https://img.shields.io/badge/Live-Vercel-000000?style=flat-square&logo=vercel&logoColor=white)](https://croo-contractor-agent.vercel.app/)
-[![Orders](https://img.shields.io/badge/Orders-65%20settled-success?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
-[![Volume](https://img.shields.io/badge/USDC%20Volume-%246.07-blue?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
-[![Completion](https://img.shields.io/badge/Completion%20Rate-97%25-brightgreen?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
+[![Orders](https://img.shields.io/badge/Orders-75%20settled-success?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
+[![Volume](https://img.shields.io/badge/USDC%20Volume-%246.14-blue?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
+[![Completion](https://img.shields.io/badge/Completion%20Rate-93.3%25-brightgreen?style=flat-square)](https://github.com/thesithunyein/croo-contractor-agent)
 
 </div>
 
@@ -30,21 +30,34 @@
 
 **Live site:** [croo-contractor-agent.vercel.app](https://croo-contractor-agent.vercel.app/) · **Agent Store:** [3 agents online](https://agent.croo.network) · **GitHub:** [source code](https://github.com/thesithunyein/croo-contractor-agent)
 
+**Built by:** [@thesithunyein](https://github.com/thesithunyein) · [DoraHacks](https://dorahacks.io/hackathon/croo-hackathon) · [X](https://x.com/thesithunyein)
+
 ---
 
-## 📊 Live Results
+## 🎬 Demo Day Presentation
+
+**CROO Agent Hackathon Finalist** — pre-recorded Demo Day pitch (max 6 min):
+
+[![Demo Day Video](https://img.shields.io/badge/Watch-Demo%20Day%20Video-red?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/Xk2hT2CYrvA)
+
+https://youtu.be/Xk2hT2CYrvA
+
+---
+
+## 📊 Live Production Metrics
+
+Real CAP settlement data from the CROO Agent Store (updated for Demo Day):
 
 | Metric | Value |
 |--------|-------|
-| 🤖 Agents deployed | 3 (Contractor + Solana TX Doctor + Summarizer) |
-| ✅ Total settled orders | 65 |
-| 💰 Total USDC volume | $6.07 |
+| **Total CAP Orders** | **75** |
+| **USDC Settled** | **$6.14** |
+| **System Completion** | **93.3%** |
 | ⛓️ On-chain settlement | Base L2 (gas sponsored by CROO) |
-| 📈 Overall completion rate | 97% |
-| 🔐 Verified deliveries | 100% (SHA-256 proof bundle per order) |
-| 🌐 External counterparties | 3 (ZERU, VeriClaim, Manga Localizer) |
+| 🔐 Verified deliveries | SHA-256 proof bundle per composed order |
+| 🌐 External A2A partners | 3 (ZERU, VeriClaim, Manga Localizer) |
 | 👛 Unique buyer wallets | 13 |
-| ☁️ 24/7 uptime | Deployed on Render.com with UptimeRobot keep-alive |
+| 🤖 Orchestrator stack | Contractor + 2 integrated execution modules |
 
 ### Per-Agent Breakdown
 
@@ -84,16 +97,21 @@ A single inbound job **fans out into multiple paid sub-orders** to diverse count
 
 ## 🏗️ Architecture
 
+Self-contained orchestrator stack: the Contractor coordinates **integrated execution modules** (internal specialists) and **external A2A partners** through CAP.
+
 ```
 caller (human / agent)
         │  negotiate + pay (CAP)
         ▼
-┌─────────────────────┐      hire + pay (CAP, USDC/Base)      ┌──────────────────┐
-│  Contractor         │ ───────────────────────────────────► │ Solana TX Doctor │
-│  (provider+requester)│ ───────────────────────────────────► │ Summarizer       │
-│  plan → hire → verify│ ───────────────────────────────────► │ <partner agents> │
-│  → compose → deliver │ ◄─────────── verified deliverables ── └──────────────────┘
-└─────────────────────┘
+┌─────────────────────────────┐     hire + pay (CAP, USDC/Base)
+│  CROO Contractor            │ ──────────────────────────────► ┌─────────────────────────────┐
+│  (provider + requester)     │                                 │ Internal Specialist Sub-Nodes│
+│  plan → hire → verify       │ ──────────────────────────────► │  · Solana TX Doctor module   │
+│  → compose → deliver        │                                 │  · Summarizer module         │
+│                             │ ──────────────────────────────► ┌─────────────────────────────┐
+│                             │                                 │ External A2A Partners        │
+│                             │                                 │  · ZERU · VeriClaim · …        │
+└─────────────────────────────┘ ◄──── verified deliverables ─── └─────────────────────────────┘
         │  deliver composed result + proof bundle (order ids + result hashes)
         ▼
      caller
@@ -115,8 +133,8 @@ All three agents are **live 24/7 on Render.com**. Click any agent name to view i
 | Logo | Agent | Role | Service | Price |
 |------|-------|------|---------|-------|
 | <img src="assets/logo-contractor-premium.svg" width="48" height="48"> | [CROO Contractor](https://agent.croo.network/agents/dc177ed7-1089-4566-b602-7234f0125ff7) | Orchestrator (provider + requester) | Decomposes goals, hires specialists, composes results | 0.01 USDC |
-| <img src="assets/logo-tx-doctor-premium.svg" width="48" height="48"> | [Solana TX Doctor](https://agent.croo.network/agents/33fbc7ae-a8b0-4afd-af59-c4f9efd9b470) | Specialist (provider) | Diagnoses failed Solana transactions (Anchor errors, compute budget, PDA mismatches) | 0.01 USDC |
-| <img src="assets/logo-summarizer-premium.svg" width="48" height="48"> | [Summarizer](https://agent.croo.network/agents/0e6a5020-6320-4157-bd95-403dc12e3bbf) | Specialist (provider) | Extractive text summarization for any input | 0.01 USDC |
+| <img src="assets/logo-tx-doctor-premium.svg" width="48" height="48"> | [Solana TX Doctor](https://agent.croo.network/agents/33fbc7ae-a8b0-4afd-af59-c4f9efd9b470) | Integrated execution module | Diagnoses failed Solana transactions (Anchor errors, compute budget, PDA mismatches) | 0.01 USDC |
+| <img src="assets/logo-summarizer-premium.svg" width="48" height="48"> | [Summarizer](https://agent.croo.network/agents/0e6a5020-6320-4157-bd95-403dc12e3bbf) | Integrated execution module | Extractive text summarization for any input | 0.01 USDC |
 
 ### 📁 Project Structure
 
