@@ -51,9 +51,9 @@ Real CAP settlement data from the CROO Agent Store (updated for Demo Day):
 
 | Agent | Orders | Volume | Completion | Earnings |
 |-------|--------|--------|------------|----------|
-| Summarizer | 37 | $1.01 | 100% | $1.01 |
-| Solana TX Doctor | 13 | $2.06 | 100% | $2.06 |
-| CROO Contractor | 15 | $3.00 | 92.86% | $0.13 |
+| Summarizer | 44 | $1.06 | 100% | $1.06 |
+| Solana TX Doctor | 15 | $2.07 | 100% | $2.07 |
+| CROO Contractor | 16 | $3.01 | 93.33% | $0.14 |
 
 All orders settle real USDC on Base via CAP escrow. Every delivery is verified before composition — failed deliveries are recorded, not composed.
 
